@@ -40,8 +40,20 @@ namespace Business.Services
             if (File.Exists(filePath))
             {
                 var json = File.ReadAllText(filePath);
-                var contacts = JsonSerializer.Deserialize<List<Contact>>(json);
-                _contacts = contacts ?? new List<Contact>();
+
+                try
+                {
+                    _contacts = JsonSerializer.Deserialize<List<Contact>>(json) ?? new List<Contact>();
+                }
+                catch (JsonException)
+                {
+                    // Hanterar fallet där filen inte innehåller giltig JSON (t.ex. är tom)
+                    _contacts = new List<Contact>();
+                }
+            }
+            else
+            {
+                _contacts = new List<Contact>();
             }
         }
     }

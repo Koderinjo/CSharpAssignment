@@ -5,14 +5,9 @@ using System.Collections.Generic;
 
 namespace Presentation.Console.MainApp
 {
-    public class ConsoleUI
+    public class ConsoleUI(IContactService contactService)
     {
-        private readonly IContactService _contactService;
-
-        public ConsoleUI(IContactService contactService)
-        {
-            _contactService = contactService;
-        }
+        private readonly IContactService _contactService = contactService;
 
         public void Run()
         {
@@ -30,8 +25,7 @@ namespace Presentation.Console.MainApp
                         AddContact();
                         break;
                     case "0":
-                        Environment.Exit(0);
-                        break;
+                        return;
                     default:
                         System.Console.WriteLine("Ogiltigt val.");
                         break;
