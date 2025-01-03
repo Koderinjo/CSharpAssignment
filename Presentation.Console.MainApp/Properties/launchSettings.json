@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Presentation.Console.MainApp": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
