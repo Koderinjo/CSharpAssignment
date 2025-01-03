@@ -36,9 +36,9 @@ namespace Presentation.Console.MainApp
         private void ShowMenu()
         {
             System.Console.WriteLine("\nKontaktlista");
-            System.Console.WriteLine("1. Lista kontakter");
-            System.Console.WriteLine("2. Lägg till kontakt");
-            System.Console.WriteLine("0. Avsluta");
+            System.Console.WriteLine("1. Visa kontakter");
+            System.Console.WriteLine("2. Lägg till en kontakt");
+            System.Console.WriteLine("0. Avsluta applikationen");
             System.Console.Write("Välj ett alternativ: ");
         }
 
