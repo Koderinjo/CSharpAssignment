@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
 
@@ -60,12 +61,29 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.21" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Business\Business.csproj" />
+   <ProjectReference Include="..\Business\Business.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+   <MauiXaml Update="Views\ContactDetailsPage.xaml">
+     <Generator>MSBuild:Compile</Generator>
+   </MauiXaml>
+	</ItemGroup>
+
+	<PropertyGroup>
+		<BuildDependsOn>
+			$(BuildDependsOn);
+			BuildBusinessProject;
+		</BuildDependsOn>
+	</PropertyGroup>
+
+	<Target Name="BuildBusinessProject" DependsOnTargets="Build">
+		<MSBuild Projects="..\Business\Business.csproj" Targets="Build" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+	</Target>
 
 </Project>

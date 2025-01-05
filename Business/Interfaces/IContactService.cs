@@ -9,5 +9,6 @@ namespace Business.Interfaces
         void AddContact(Contact contact);
         void SaveContactsToFile(string filePath);
         void LoadContactsFromFile(string filePath);
+        void DeleteContact(Guid contactid);
     }
 }

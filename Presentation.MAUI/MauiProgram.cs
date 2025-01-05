@@ -1,25 +1,44 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Business.Interfaces;
+using Business.Services;
+using Microsoft.Extensions.Logging;
+using Presentation.MAUI.ViewModels;
+using Presentation.MAUI.Views;
 
-namespace Presentation.MAUI
+namespace Presentation.MAUI;
+
+public static class MauiProgram
 {
-    public static class MauiProgram
+    public static string FilePath { get; private set; }
+
+    static MauiProgram()
     {
-        public static MauiApp CreateMauiApp()
-        {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+        FilePath = Path.Combine(FileSystem.AppDataDirectory, "contacts.json");
+    }
+
+    public static MauiApp CreateMauiApp()
+    {
+        string filePath = Path.Combine(FileSystem.AppDataDirectory, "contacts.json");
+
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            });
+
+        builder.Services.AddSingleton<IContactService>(new ContactService(filePath));
+        builder.Services.AddSingleton<MainPageViewModel>();
+        builder.Services.AddSingleton<ContactDetailsViewModel>();
+
+        builder.Services.AddSingleton<MainPage>();
+        builder.Services.AddTransient<ContactDetailsPage>();
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
 
-            return builder.Build();
-        }
+        return builder.Build();
     }
 }

@@ -47,13 +47,23 @@ namespace Business.Services
                 }
                 catch (JsonException)
                 {
-                    // Hanterar fallet där filen inte innehåller giltig JSON (t.ex. är tom)
+                    // Handles if the file doesnt contain valid JSON, for example is empty.
                     _contacts = new List<Contact>();
                 }
             }
             else
             {
                 _contacts = new List<Contact>();
+            }
+        }
+
+        public void DeleteContact(Guid contactId)
+        {
+            var contactToRemove = _contacts.FirstOrDefault(c => c.Id == contactId);
+            if (contactToRemove != null)
+            {
+                _contacts.Remove(contactToRemove);
+                SaveContactsToFile(_filePath);
             }
         }
     }

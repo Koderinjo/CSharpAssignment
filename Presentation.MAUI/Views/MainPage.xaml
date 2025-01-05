@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:Presentation.MAUI.ViewModels"
+             xmlns:models="clr-namespace:Business.Models;assembly=Business"
+             x:Class="Presentation.MAUI.Views.MainPage"
+             x:DataType="viewModels:MainPageViewModel">
+
+    <VerticalStackLayout Padding="20">
+        <ListView ItemsSource="{Binding Contacts}"
+                  CachingStrategy="RecycleElement"
+                  ItemSelected="OnContactSelected">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="models:Contact">
+                    <ViewCell>
+                        <Grid Padding="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" 
+                                   Text="{Binding FirstName}" 
+                                   FontSize="Medium" 
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"/>
+                            <Label Grid.Column="1" 
+                                   Text="{Binding LastName}"
+                                   FontSize="Medium"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Button Text="Add Contact" 
+                Command="{Binding AddContactCommand}" 
+                HorizontalOptions="Center" />
+    </VerticalStackLayout>
+</ContentPage>
