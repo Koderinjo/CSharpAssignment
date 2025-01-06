@@ -17,8 +17,6 @@ public static class MauiProgram
 
     public static MauiApp CreateMauiApp()
     {
-        string filePath = Path.Combine(FileSystem.AppDataDirectory, "contacts.json");
-
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
@@ -28,12 +26,12 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        builder.Services.AddSingleton<IContactService>(new ContactService(filePath));
+        builder.Services.AddSingleton<IContactService>(new ContactService(FilePath));
         builder.Services.AddSingleton<MainPageViewModel>();
-        builder.Services.AddSingleton<ContactDetailsViewModel>();
-
+        builder.Services.AddTransient<ContactDetailsViewModel>();
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddTransient<ContactDetailsPage>();
+        builder.Services.AddSingleton<AppShell>();
 
 #if DEBUG
         builder.Logging.AddDebug();

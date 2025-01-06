@@ -1,18 +1,23 @@
 ﻿using Presentation.MAUI.ViewModels;
+using Business.Models;
+using System.Windows.Input;
 
-namespace Presentation.MAUI.Views
+namespace Presentation.MAUI.Views;
+
+public partial class MainPage : ContentPage
 {
-    public partial class MainPage : ContentPage
+    public MainPage(MainPageViewModel viewModel)
     {
-        public MainPage(MainPageViewModel viewModel)
-        {
-            InitializeComponent();
-            BindingContext = viewModel;
-        }
+        InitializeComponent();
+        BindingContext = viewModel;
+    }
 
-        private void OnContactSelected(object sender, SelectedItemChangedEventArgs e)
+    private void OnContactSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+        if (e.SelectedItem != null)
         {
-            // Add navigation logic here later
+            var contact = e.SelectedItem as Business.Models.Contact;
+            ((MainPageViewModel)BindingContext).EditContactCommand.Execute(contact);
         }
     }
 }

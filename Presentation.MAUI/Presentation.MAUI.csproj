@@ -76,6 +76,10 @@
 	</ItemGroup>
 
 	<PropertyGroup>
+		<NoWarn>$(NoWarn);CA1416</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup>
 		<BuildDependsOn>
 			$(BuildDependsOn);
 			BuildBusinessProject;

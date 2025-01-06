@@ -1,25 +1,13 @@
-﻿using Presentation.MAUI.ViewModels;
-using Presentation.MAUI.Views;
-
+﻿#pragma warning disable CS0618
 namespace Presentation.MAUI;
 
 public partial class App : Application
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public App(IServiceProvider serviceProvider)
+    public App()
     {
         InitializeComponent();
 
-        _serviceProvider = serviceProvider;
-    }
-
-    protected override Window CreateWindow(IActivationState? activationState)
-    {
-        var mainPage = new NavigationPage(new MainPage(_serviceProvider.GetRequiredService<MainPageViewModel>()));
-
-        var window = new Window(mainPage);
-
-        return window;
+        MainPage = new AppShell();
     }
 }
+#pragma warning restore CS0618

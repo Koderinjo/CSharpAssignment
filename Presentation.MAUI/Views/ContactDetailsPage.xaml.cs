@@ -1,9 +1,13 @@
-namespace Presentation.MAUI.Views;
+using Presentation.MAUI.ViewModels;
 
-public partial class ContactDetailsPage : ContentPage
+namespace Presentation.MAUI.Views
 {
-	public ContactDetailsPage()
-	{
-		InitializeComponent();
-	}
+    public partial class ContactDetailsPage : ContentPage
+    {
+        public ContactDetailsPage(ContactDetailsViewModel viewModel)
+        {
+            InitializeComponent();
+            BindingContext = viewModel;
+        }
+    }
 }

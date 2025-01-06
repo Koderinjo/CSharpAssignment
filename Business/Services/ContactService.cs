@@ -43,17 +43,16 @@ namespace Business.Services
 
                 try
                 {
-                    _contacts = JsonSerializer.Deserialize<List<Contact>>(json) ?? new List<Contact>();
+                    _contacts = JsonSerializer.Deserialize<List<Contact>>(json) ?? [];
                 }
                 catch (JsonException)
                 {
-                    // Handles if the file doesnt contain valid JSON, for example is empty.
-                    _contacts = new List<Contact>();
+                    _contacts = [];
                 }
             }
             else
             {
-                _contacts = new List<Contact>();
+                _contacts = [];
             }
         }
 
@@ -63,6 +62,23 @@ namespace Business.Services
             if (contactToRemove != null)
             {
                 _contacts.Remove(contactToRemove);
+                SaveContactsToFile(_filePath);
+            }
+        }
+
+        public void UpdateContact(Contact updatedContact)
+        {
+            var existingContact = _contacts.FirstOrDefault(c => c.Id == updatedContact.Id);
+            if (existingContact != null)
+            {
+                existingContact.FirstName = updatedContact.FirstName;
+                existingContact.LastName = updatedContact.LastName;
+                existingContact.Email = updatedContact.Email;
+                existingContact.PhoneNumber = updatedContact.PhoneNumber;
+                existingContact.StreetAddress = updatedContact.StreetAddress;
+                existingContact.PostalCode = updatedContact.PostalCode;
+                existingContact.City = updatedContact.City;
+
                 SaveContactsToFile(_filePath);
             }
         }

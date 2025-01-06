@@ -36,5 +36,8 @@
         <Button Text="Add Contact" 
                 Command="{Binding AddContactCommand}" 
                 HorizontalOptions="Center" />
+        <Button Text="Edit Contact"
+                Command="{Binding EditContactCommand}"
+                HorizontalOptions="Center" />
     </VerticalStackLayout>
 </ContentPage>

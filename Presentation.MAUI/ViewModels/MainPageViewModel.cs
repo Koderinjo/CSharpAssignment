@@ -21,13 +21,11 @@ namespace Presentation.MAUI.ViewModels
             _contactService = contactService;
             LoadContacts();
 
-            // Updated AddContactCommand to use GoToContactDetailsPage without parameters
             AddContactCommand = new Command(async () => await GoToContactDetailsPage());
             EditContactCommand = new Command(async (param) => await EditContact(param));
             DeleteContactCommand = new Command(DeleteContact);
         }
 
-        // Updated GoToContactDetailsPage to have a nullable parameter and to use parameterless navigation.
         private async Task GoToContactDetailsPage(Business.Models.Contact? contact = null)
         {
             if (contact == null)
@@ -36,7 +34,6 @@ namespace Presentation.MAUI.ViewModels
             }
             else
             {
-                // Navigation for editing an existing contact
                 await Shell.Current.GoToAsync(nameof(ContactDetailsPage), new Dictionary<string, object>
                 {
                     { "SelectedContact", contact }
@@ -44,12 +41,10 @@ namespace Presentation.MAUI.ViewModels
             }
         }
 
-
         private async Task EditContact(object? param)
         {
             if (param is Business.Models.Contact contact)
             {
-                // Navigate to the detailspage and pass the contact
                 await Shell.Current.GoToAsync(nameof(ContactDetailsPage), new Dictionary<string, object>
                 {
                     { "SelectedContact", contact }
@@ -62,7 +57,7 @@ namespace Presentation.MAUI.ViewModels
             if (param is Business.Models.Contact contact)
             {
                 _contactService.DeleteContact(contact.Id);
-                LoadContacts(); // Refresh the list after deleting
+                LoadContacts();
             }
         }
 

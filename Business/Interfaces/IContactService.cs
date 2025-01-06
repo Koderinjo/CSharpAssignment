@@ -10,5 +10,6 @@ namespace Business.Interfaces
         void SaveContactsToFile(string filePath);
         void LoadContactsFromFile(string filePath);
         void DeleteContact(Guid contactid);
+        void UpdateContact(Contact updatedContact);
     }
 }
