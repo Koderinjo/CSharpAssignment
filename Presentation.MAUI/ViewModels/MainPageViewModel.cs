@@ -1,7 +1,5 @@
 ﻿using Business.Interfaces;
-using Business.Models;
 using Presentation.MAUI.Views;
-using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace Presentation.MAUI.ViewModels
@@ -10,64 +8,30 @@ namespace Presentation.MAUI.ViewModels
     {
         private readonly IContactService _contactService;
 
-        public ObservableCollection<Business.Models.Contact> Contacts { get; set; } = [];
-
+        public ICommand ShowContactsCommand { get; private set; }
         public ICommand AddContactCommand { get; private set; }
-        public ICommand EditContactCommand { get; private set; }
-        public ICommand DeleteContactCommand { get; private set; }
 
         public MainPageViewModel(IContactService contactService)
         {
             _contactService = contactService;
-            LoadContacts();
 
+            ShowContactsCommand = new Command(async () => await NavigateToContactsListPage());
             AddContactCommand = new Command(async () => await GoToContactDetailsPage());
-            EditContactCommand = new Command(async (param) => await EditContact(param));
-            DeleteContactCommand = new Command(DeleteContact);
         }
 
-        private async Task GoToContactDetailsPage(Business.Models.Contact? contact = null)
+        private async Task NavigateToContactsListPage()
         {
-            if (contact == null)
-            {
-                await Shell.Current.GoToAsync(nameof(ContactDetailsPage));
-            }
-            else
-            {
-                await Shell.Current.GoToAsync(nameof(ContactDetailsPage), new Dictionary<string, object>
-                {
-                    { "SelectedContact", contact }
-                });
-            }
+            await Shell.Current.GoToAsync(nameof(ContactsListPage));
         }
 
-        private async Task EditContact(object? param)
+        private async Task GoToContactDetailsPage()
         {
-            if (param is Business.Models.Contact contact)
-            {
-                await Shell.Current.GoToAsync(nameof(ContactDetailsPage), new Dictionary<string, object>
-                {
-                    { "SelectedContact", contact }
-                });
-            }
+            await Shell.Current.GoToAsync(nameof(ContactDetailsPage));
         }
 
-        private void DeleteContact(object? param)
+        internal void GoToContactDetailsPage(Business.Models.Contact? contact)
         {
-            if (param is Business.Models.Contact contact)
-            {
-                _contactService.DeleteContact(contact.Id);
-                LoadContacts();
-            }
-        }
-
-        private void LoadContacts()
-        {
-            Contacts.Clear();
-            foreach (var contact in _contactService.GetAllContacts())
-            {
-                Contacts.Add(contact);
-            }
+            throw new NotImplementedException();
         }
     }
 }

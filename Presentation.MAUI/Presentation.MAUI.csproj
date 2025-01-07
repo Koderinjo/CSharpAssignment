@@ -73,6 +73,9 @@
    <MauiXaml Update="Views\ContactDetailsPage.xaml">
      <Generator>MSBuild:Compile</Generator>
    </MauiXaml>
+   <MauiXaml Update="Views\ContactsListPage.xaml">
+     <Generator>MSBuild:Compile</Generator>
+   </MauiXaml>
 	</ItemGroup>
 
 	<PropertyGroup>

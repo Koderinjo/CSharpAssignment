@@ -9,6 +9,7 @@ namespace Presentation.MAUI
             InitializeComponent();
 
             Routing.RegisterRoute(nameof(ContactDetailsPage), typeof(ContactDetailsPage));
+            Routing.RegisterRoute(nameof(ContactsListPage), typeof(ContactsListPage));
         }
     }
 }

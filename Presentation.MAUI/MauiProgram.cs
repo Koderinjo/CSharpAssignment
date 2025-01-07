@@ -32,6 +32,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddTransient<ContactDetailsPage>();
         builder.Services.AddSingleton<AppShell>();
+        builder.Services.AddTransient<ContactsListPage>();
+        builder.Services.AddTransient<ContactsListViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();

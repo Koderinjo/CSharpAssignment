@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:Presentation.MAUI.ViewModels"
+             xmlns:models="clr-namespace:Business.Models;assembly=Business"
+             x:Class="Presentation.MAUI.Views.ContactsListPage"
+             x:DataType="viewModels:ContactsListViewModel"
+             Title="Contacts">
+
+    <VerticalStackLayout Padding="20">
+        <ListView ItemsSource="{Binding Contacts}"
+                  CachingStrategy="RecycleElement">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="models:Contact">
+                    <ViewCell>
+                        <Grid Padding="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="0" 
+                                   Text="{Binding FirstName}" 
+                                   FontSize="Medium" 
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"/>
+                            <Label Grid.Column="1" 
+                                   Text="{Binding LastName}"
+                                   FontSize="Medium"
+                                   VerticalOptions="Center"/>
+
+                            <ImageButton Grid.Column="2" 
+                                         Source="editicon.png"
+                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ContactsListViewModel}}, Path=EditContactCommand}"
+                                         CommandParameter="{Binding .}"
+                                         HeightRequest="25"
+                                         WidthRequest="25"/>
+                            <ImageButton Grid.Column="3"
+                                         Source="deleteicon.png"
+                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ContactsListViewModel}}, Path=DeleteContactCommand}"
+                                         CommandParameter="{Binding .}"
+                                         HeightRequest="25"
+                                         WidthRequest="25"/>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </VerticalStackLayout>
+</ContentPage>
