@@ -49,11 +49,11 @@ namespace Presentation.MAUI.ViewModels
             if (param is Business.Models.Contact contact)
             {
                 _contactService.DeleteContact(contact.Id);
-                LoadContacts(); // Refresh the list after deleting
+                LoadContacts();
             }
         }
 
-        private void LoadContacts()
+        public void LoadContacts()
         {
             Contacts.Clear();
             foreach (var contact in _contactService.GetAllContacts())

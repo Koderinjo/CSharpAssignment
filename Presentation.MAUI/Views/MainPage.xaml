@@ -1,19 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewModels="clr-namespace:Presentation.MAUI.ViewModels"
-             x:Class="Presentation.MAUI.Views.MainPage"
-             x:DataType="viewModels:MainPageViewModel">
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewModels="clr-namespace:Presentation.MAUI.ViewModels"
+    x:Class="Presentation.MAUI.Views.MainPage"
+    x:DataType="viewModels:MainPageViewModel"
+    Title="Wonderful ContactApp">
 
-    <VerticalStackLayout Padding="20" Spacing="10">
+    <VerticalStackLayout Padding="20" Spacing="30">
 
-        <Button Text="Show Contacts" 
-                Command="{Binding ShowContactsCommand}"
-                HorizontalOptions="Center" />
+        <Button 
+        Text="Show and Manage Contacts" 
+        Command="{Binding ShowContactsCommand}"
+        HorizontalOptions="Center"
+        FontSize="16"
+        TextColor="Navy"
+        CornerRadius="10"
+        Padding="10,5,10,5" />
 
-        <Button Text="Add Contact" 
-                Command="{Binding AddContactCommand}" 
-                HorizontalOptions="Center" />
+        <Button 
+        Text="Add Contact" 
+        Command="{Binding AddContactCommand}" 
+        HorizontalOptions="Center"
+        FontSize="16"
+        TextColor="Navy"
+        CornerRadius="10"
+        Padding="10,5,10,5" />
 
     </VerticalStackLayout>
+    
 </ContentPage>

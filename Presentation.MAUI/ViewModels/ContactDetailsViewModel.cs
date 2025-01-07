@@ -49,6 +49,8 @@ namespace Presentation.MAUI.ViewModels
 
         public ICommand SaveContactCommand { get; private set; }
         public ICommand CancelCommand { get; private set; }
+        public Command DeleteContactCommand { get; private set; }
+
         public ContactDetailsViewModel(IContactService contactService)
         {
             _contactService = contactService;
@@ -65,6 +67,8 @@ namespace Presentation.MAUI.ViewModels
 
             SaveContactCommand = new Command(async () => await SaveContact());
             CancelCommand = new Command(async () => await Cancel());
+            DeleteContactCommand = new Command(async () => await DeleteContact());
+
         }
 
         private async Task SaveContact()
@@ -93,6 +97,15 @@ namespace Presentation.MAUI.ViewModels
                 }
         #pragma warning restore CA1822
         #pragma warning restore IDE0079
+
+        private async Task DeleteContact()
+        {
+            if (SelectedContact != null)
+            {
+                _contactService.DeleteContact(SelectedContact.Id);
+            }
+            await Shell.Current.GoToAsync("..");
+        }
 
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)

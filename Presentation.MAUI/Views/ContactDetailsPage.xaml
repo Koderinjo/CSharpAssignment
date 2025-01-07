@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewModels="clr-namespace:Presentation.MAUI.ViewModels"
-             x:Class="Presentation.MAUI.Views.ContactDetailsPage"
-             x:DataType="viewModels:ContactDetailsViewModel">
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewModels="clr-namespace:Presentation.MAUI.ViewModels"
+    x:Class="Presentation.MAUI.Views.ContactDetailsPage"
+    x:DataType="viewModels:ContactDetailsViewModel">
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="10">
+        <VerticalStackLayout 
+            Padding="20" Spacing="10">
 
             <Label Text="First Name:" />
             <Entry Text="{Binding Contact.FirstName}" />
@@ -34,7 +36,12 @@
 
             <Button Text="Cancel" 
                     Command="{Binding CancelCommand}" />
+            
+            <Button Text="Delete Contact"
+                    Command="{Binding DeleteContactCommand}"
+                    BackgroundColor="DarkRed" />
 
         </VerticalStackLayout>
     </ScrollView>
+    
 </ContentPage>
