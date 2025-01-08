@@ -1,6 +1,5 @@
 ﻿using Business.Interfaces;
 using Business.Models;
-using Presentation.MAUI.Views;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -9,19 +8,21 @@ namespace Presentation.MAUI.ViewModels
     public class ContactsListViewModel : BindableObject
     {
         private readonly IContactService _contactService;
+        private readonly INavigationService _navigationService;
 
         public ObservableCollection<Business.Models.Contact> Contacts { get; set; } = new ObservableCollection<Business.Models.Contact>();
 
         public ICommand EditContactCommand { get; private set; }
         public ICommand DeleteContactCommand { get; private set; }
 
-        public ContactsListViewModel(IContactService contactService)
+        public ContactsListViewModel(IContactService contactService, INavigationService navigationService)
         {
             _contactService = contactService;
+            _navigationService = navigationService;
             LoadContacts();
 
             EditContactCommand = new Command(async (param) => await EditContact(param));
-            DeleteContactCommand = new Command(DeleteContact);
+            DeleteContactCommand = new Command(async (param) => await DeleteContact(param));
         }
 
         private async Task EditContact(object? param)
@@ -34,17 +35,10 @@ namespace Presentation.MAUI.ViewModels
 
         private async Task GoToContactDetailsPage(Business.Models.Contact? contact = null)
         {
-            var viewModel = new ContactDetailsViewModel(_contactService);
-            if (contact != null)
-            {
-                viewModel.SelectedContact = contact;
-            }
-
-            var detailsPage = new ContactDetailsPage(viewModel);
-            await Shell.Current.Navigation.PushAsync(detailsPage);
+            await _navigationService.GoToContactDetailsPage(contact);
         }
 
-        private void DeleteContact(object? param)
+        private async Task DeleteContact(object? param)
         {
             if (param is Business.Models.Contact contact)
             {

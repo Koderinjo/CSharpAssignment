@@ -10,6 +10,9 @@ namespace Presentation.MAUI.ViewModels
     public partial class ContactDetailsViewModel : INotifyPropertyChanged
     {
         private readonly IContactService _contactService;
+        private readonly INavigationService _navigationService;
+        private readonly IContactFactory _contactFactory;
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private Business.Models.Contact? _selectedContact;
@@ -19,16 +22,7 @@ namespace Presentation.MAUI.ViewModels
             set
             {
                 _selectedContact = value;
-                Contact = _selectedContact ?? new Business.Models.Contact()
-                {
-                    FirstName = string.Empty,
-                    LastName = string.Empty,
-                    Email = string.Empty,
-                    PhoneNumber = string.Empty,
-                    StreetAddress = string.Empty,
-                    PostalCode = string.Empty,
-                    City = string.Empty
-                };
+                Contact = _selectedContact ?? _contactFactory.CreateContact();
                 OnPropertyChanged(nameof(Contact));
             }
         }
@@ -49,54 +43,37 @@ namespace Presentation.MAUI.ViewModels
 
         public ICommand SaveContactCommand { get; private set; }
         public ICommand CancelCommand { get; private set; }
-        public Command DeleteContactCommand { get; private set; }
+        public ICommand DeleteContactCommand { get; private set; }
 
-        public ContactDetailsViewModel(IContactService contactService)
+        public ContactDetailsViewModel(IContactService contactService, INavigationService navigationService, IContactFactory contactFactory)
         {
             _contactService = contactService;
-            _contact = new Business.Models.Contact()
-            {
-                FirstName = string.Empty,
-                LastName = string.Empty,
-                Email = string.Empty,
-                PhoneNumber = string.Empty,
-                StreetAddress = string.Empty,
-                PostalCode = string.Empty,
-                City = string.Empty
-            };
+            _navigationService = navigationService;
+            _contactFactory = contactFactory;
+            _contact = _contactFactory.CreateContact();
 
             SaveContactCommand = new Command(async () => await SaveContact());
             CancelCommand = new Command(async () => await Cancel());
             DeleteContactCommand = new Command(async () => await DeleteContact());
-
         }
 
         private async Task SaveContact()
         {
-            if (Contact != null)
+            if (SelectedContact == null)
             {
-                if (SelectedContact == null)
-                {
-                    _contactService.AddContact(Contact);
-                }
-                else
-                {
-                    _contactService.UpdateContact(Contact);
-                }
+                _contactService.AddContact(Contact);
             }
-
-            await Shell.Current.GoToAsync("..");
+            else
+            {
+                _contactService.UpdateContact(Contact);
+            }
+            await _navigationService.GoBack();
         }
 
-        // Got help from Gemini with the pragma part, couldnt get rid of the warning otherwise
-        #pragma warning disable IDE0079
-        #pragma warning disable CA1822
-                private async Task Cancel()
-                {
-                    await Shell.Current.GoToAsync("..");
-                }
-        #pragma warning restore CA1822
-        #pragma warning restore IDE0079
+        private async Task Cancel()
+        {
+            await _navigationService.GoBack();
+        }
 
         private async Task DeleteContact()
         {
@@ -104,9 +81,8 @@ namespace Presentation.MAUI.ViewModels
             {
                 _contactService.DeleteContact(SelectedContact.Id);
             }
-            await Shell.Current.GoToAsync("..");
+            await _navigationService.GoBack();
         }
-
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {

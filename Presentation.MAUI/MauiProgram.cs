@@ -1,6 +1,8 @@
-﻿using Business.Interfaces;
+﻿using Business.Factories;
+using Business.Interfaces;
 using Business.Services;
 using Microsoft.Extensions.Logging;
+using Presentation.MAUI.Services;
 using Presentation.MAUI.ViewModels;
 using Presentation.MAUI.Views;
 
@@ -27,13 +29,18 @@ public static class MauiProgram
             });
 
         builder.Services.AddSingleton<IContactService>(new ContactService(FilePath));
-        builder.Services.AddSingleton<MainPageViewModel>();
-        builder.Services.AddTransient<ContactDetailsViewModel>();
+        builder.Services.AddSingleton<INavigationService, NavigationService>();
+
+        builder.Services.AddSingleton<AppShell>();
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddTransient<ContactDetailsPage>();
-        builder.Services.AddSingleton<AppShell>();
+
         builder.Services.AddTransient<ContactsListPage>();
+        builder.Services.AddSingleton<MainPageViewModel>();
+        builder.Services.AddTransient<ContactDetailsViewModel>();
         builder.Services.AddTransient<ContactsListViewModel>();
+
+        builder.Services.AddTransient<IContactFactory, ContactFactory>();
 
 #if DEBUG
         builder.Logging.AddDebug();

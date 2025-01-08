@@ -1,37 +1,31 @@
 ﻿using Business.Interfaces;
-using Presentation.MAUI.Views;
 using System.Windows.Input;
 
 namespace Presentation.MAUI.ViewModels
 {
-    public class MainPageViewModel
+    public class MainPageViewModel : BindableObject
     {
-        private readonly IContactService _contactService;
+        private readonly INavigationService _navigationService;
 
         public ICommand ShowContactsCommand { get; private set; }
         public ICommand AddContactCommand { get; private set; }
 
-        public MainPageViewModel(IContactService contactService)
+        public MainPageViewModel(INavigationService navigationService)
         {
-            _contactService = contactService;
+            _navigationService = navigationService;
 
-            ShowContactsCommand = new Command(async () => await NavigateToContactsListPage());
+            ShowContactsCommand = new Command(async () => await ShowContacts());
             AddContactCommand = new Command(async () => await GoToContactDetailsPage());
         }
 
-        private async Task NavigateToContactsListPage()
+        private async Task ShowContacts()
         {
-            await Shell.Current.GoToAsync(nameof(ContactsListPage));
+            await _navigationService.GoToContactsListPage();
         }
 
         private async Task GoToContactDetailsPage()
         {
-            await Shell.Current.GoToAsync(nameof(ContactDetailsPage));
-        }
-
-        internal void GoToContactDetailsPage(Business.Models.Contact? contact)
-        {
-            throw new NotImplementedException();
+            await _navigationService.GoToContactDetailsPage();
         }
     }
 }
