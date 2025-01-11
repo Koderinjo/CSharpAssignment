@@ -9,6 +9,7 @@ namespace Business.Factories
         {
             return new Contact
             {
+                
                 FirstName = string.Empty,
                 LastName = string.Empty,
                 Email = string.Empty,

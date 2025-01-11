@@ -38,13 +38,14 @@ namespace Presentation.MAUI.ViewModels
             await _navigationService.GoToContactDetailsPage(contact);
         }
 
-        private async Task DeleteContact(object? param)
+        private Task DeleteContact(object? param)
         {
             if (param is Business.Models.Contact contact)
             {
                 _contactService.DeleteContact(contact.Id);
                 LoadContacts();
             }
+            return Task.CompletedTask;
         }
 
         public void LoadContacts()

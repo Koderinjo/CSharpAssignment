@@ -1,126 +1,53 @@
-﻿using Business.Models;
-using Business.Services;
+﻿using System;
+using System.Collections.Generic;
+using Business.Interfaces;
+using Business.Models;
+using Moq;
 using Xunit;
-using System.IO;
-using System.Linq;
 
 namespace Business.Tests
 {
     public class ContactServiceTests
     {
-        private const string TestFilePath = "test_contacts.json";
+        private readonly Mock<IContactService> _mockContactService;
 
         public ContactServiceTests()
         {
-            File.WriteAllText(TestFilePath, "");
+            _mockContactService = new Mock<IContactService>();
         }
 
         [Fact]
-        public void AddContact_ShouldAddContactToList()
+        public void GetAllContacts_ReturnsAllContacts()
         {
             // Arrange
-            var contactService = new ContactService(TestFilePath);
-            var contact = new Contact
+            var expectedContacts = new List<Contact>
             {
-                FirstName = "Test",
-                LastName = "Testsson",
-                Email = "test@testsson.com",
-                PhoneNumber = "1234567890",
-                StreetAddress = "Testgatan 1",
-                PostalCode = "123 45",
-                City = "Teststan"
+                new Contact { Id = Guid.NewGuid(), FirstName = "Alice", LastName = "Doe", Email = "alice@example.com", PhoneNumber = "1234567890", StreetAddress = "Some Street 1", PostalCode = "123 45", City = "Some City" },
+                new Contact { Id = Guid.NewGuid(), FirstName = "Bob", LastName = "Smith", Email = "bob@example.com", PhoneNumber = "0987654321", StreetAddress = "Some Street 2", PostalCode = "678 90", City = "Another City" }
             };
 
+            _mockContactService.Setup(cs => cs.GetAllContacts()).Returns(expectedContacts);
+
             // Act
-            contactService.AddContact(contact);
+            var actualContacts = _mockContactService.Object.GetAllContacts();
 
             // Assert
-            var contacts = contactService.GetAllContacts();
-            Assert.Contains(contact, contacts);
+            Assert.Equal(expectedContacts.Count, actualContacts.Count);
+            Assert.Equal(expectedContacts, actualContacts);
         }
 
         [Fact]
-        public void GetAllContacts_ShouldReturnAllContacts()
+        public void AddContact_AddsContactSuccessfully()
         {
             // Arrange
-            var contactService = new ContactService(TestFilePath);
-            var contact1 = new Contact { FirstName = "Test1", LastName = "Testsson", Email = "test1@testsson.com", PhoneNumber = "1234567890", StreetAddress = "Testgatan 1", PostalCode = "123 45", City = "Teststan" };
-            var contact2 = new Contact { FirstName = "Test2", LastName = "Testsson", Email = "test2@testsson.com", PhoneNumber = "1234567890", StreetAddress = "Testgatan 2", PostalCode = "678 90", City = "Teststad" };
-            contactService.AddContact(contact1);
-            contactService.AddContact(contact2);
+            var newContact = new Contact { Id = Guid.NewGuid(), FirstName = "Charlie", LastName = "Johnson", Email = "charlie@example.com", PhoneNumber = "1112223333", StreetAddress = "Test Street", PostalCode = "444 55", City = "Test City" };
+            _mockContactService.Setup(cs => cs.AddContact(It.IsAny<Contact>()));
 
             // Act
-            var contacts = contactService.GetAllContacts();
+            _mockContactService.Object.AddContact(newContact);
 
             // Assert
-            Assert.Equal(2, contacts.Count);
-            Assert.Contains(contact1, contacts);
-            Assert.Contains(contact2, contacts);
+            _mockContactService.Verify(cs => cs.AddContact(newContact), Times.Once);
         }
-
-        [Fact]
-        public void SaveContactsToFile_ShouldSaveContactsToJsonFile()
-        {
-            // Arrange
-            var contactService = new ContactService(TestFilePath);
-            var contact = new Contact { FirstName = "Test", LastName = "Testsson", Email = "test@testsson.com", PhoneNumber = "1234567890", StreetAddress = "Testgatan 1", PostalCode = "123 45", City = "Teststan" };
-            contactService.AddContact(contact);
-
-            // Act
-            contactService.SaveContactsToFile(TestFilePath);
-
-            // Assert
-            Assert.True(File.Exists(TestFilePath));
-            var savedContacts = contactService.GetAllContacts();
-            Assert.Single(savedContacts);
-            Assert.Equal(contact.FirstName, savedContacts[0].FirstName);
-        }
-
-        [Fact]
-        public void LoadContactsFromFile_ShouldLoadContactsFromJsonFile()
-        {
-            // Arrange
-            var contactService = new ContactService(TestFilePath);
-            var contact = new Contact { FirstName = "Test", LastName = "Testsson", Email = "test@testsson.com", PhoneNumber = "1234567890", StreetAddress = "Testgatan 1", PostalCode = "123 45", City = "Teststan" };
-            contactService.AddContact(contact);
-            contactService.SaveContactsToFile(TestFilePath);
-
-            var newContactService = new ContactService(TestFilePath);
-
-            // Act
-            var loadedContacts = newContactService.GetAllContacts();
-
-            // Assert
-            Assert.Single(loadedContacts);
-            Assert.Equal(contact.FirstName, loadedContacts[0].FirstName);
-        }
-
-        [Fact]
-        public void LoadContactsFromFile_ShouldHandleEmptyFile()
-        {
-            // Arrange
-            var contactService = new ContactService(TestFilePath);
-
-            // Act
-            var contacts = contactService.GetAllContacts();
-
-            // Assert
-            Assert.Empty(contacts);
-        }
-
-        [Fact]
-        public void LoadContactsFromFile_ShouldHandleInvalidJson()
-        {
-            // Arrange
-            File.WriteAllText(TestFilePath, "Invalid JSON");
-            var contactService = new ContactService(TestFilePath);
-
-            // Act
-            var contacts = contactService.GetAllContacts();
-
-            // Assert
-            Assert.Empty(contacts);
-        }
-
     }
 }

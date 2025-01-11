@@ -17,6 +17,7 @@
 		<OutputType>Exe</OutputType>
 		<RootNamespace>Presentation.MAUI</RootNamespace>
 		<UseMaui>true</UseMaui>
+		<EnablePreviewFeatures>true</EnablePreviewFeatures>
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
@@ -70,6 +71,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+   <MauiXaml Update="App.xaml">
+     <Generator>MSBuild:Compile</Generator>
+   </MauiXaml>
+   <MauiXaml Update="AppShell.xaml">
+     <Generator>MSBuild:Compile</Generator>
+   </MauiXaml>
    <MauiXaml Update="Views\ContactDetailsPage.xaml">
      <Generator>MSBuild:Compile</Generator>
    </MauiXaml>
